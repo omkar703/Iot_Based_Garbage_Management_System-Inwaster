@@ -146,15 +146,17 @@ The web application interfaces with the physical receptacle to facilitate user a
 
 ### 4.2 Live Application Demonstration Video
 
-A continuous recording demonstrating user authentication, live camera QR scanning, deposit credit reconciliation, and voucher redemption is provided below:
+The complete web application workflow—including user authentication, real-time camera QR scanning, deposit verification, points ledger increment, and partner voucher redemption—is demonstrated below:
 
-<video src="./public/webapp/web-app-demo.mp4" controls="controls" width="100%" style="max-width: 720px; border-radius: 8px;">
-  Your browser does not support the video tag.
-</video>
+![Web Application Live Demonstration](./public/webapp/web-app-demo.gif)
 
-> [!NOTE]
-> If your browser or markdown viewer does not render the embedded video player above, you can directly view or download the recording:  
-> **[Direct Link: Web Application Demonstration Video (`web-app-demo.mp4`)](./public/webapp/web-app-demo.mp4)**
+*Figure 4D: Continuous end-to-end recording demonstrating real-time camera scanning, deposit validation, points ledger increment, and voucher claim.*
+
+> [!TIP]
+> **Video Playback & High-Definition Options**:
+> - The live demonstration above loops automatically inline on GitHub and markdown readers.
+> - **[Watch High-Definition 1080p Video on GitHub (`web-app-demo.mp4`)](https://github.com/omkar703/Iot_Based_Garbage_Management_System-Inwaster/blob/main/public/webapp/web-app-demo.mp4)**
+> - **[Download MP4 Recording via Release v1.0.0](https://github.com/omkar703/Iot_Based_Garbage_Management_System-Inwaster/releases/download/v1.0.0/web-app-demo.mp4)**
 
 ---
 
@@ -273,7 +275,8 @@ InWaster/
 │       ├── IMG-20240220-WA0162.jpg    # Mobile camera scanning OLED screen
 │       ├── IMG-20240220-WA0163.jpg    # Scan confirmation & deposit dialog
 │       ├── IMG-20240220-WA0167.jpg    # User rewards balance & redemption ledger
-│       └── web-app-demo.mp4           # Complete live demonstration video
+│       ├── web-app-demo.gif           # Inline animated walkthrough demonstration
+│       └── web-app-demo.mp4           # 1080p high-definition video recording
 │
 ├── notebooks/                         # Verified Jupyter research notebooks
 │   ├── README.md                      # Execution guide and notebook index
