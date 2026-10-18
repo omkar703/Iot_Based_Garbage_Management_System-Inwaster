@@ -1,0 +1,152 @@
+[
+  {
+    "timestamp": "2026-09-01 00:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 84.85,
+    "fill_percentage": 17.6,
+    "total_weight_kg": 3.116,
+    "battery_percentage": 100.0,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 01:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 84.48,
+    "fill_percentage": 17.72,
+    "total_weight_kg": 3.137,
+    "battery_percentage": 99.9,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 02:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 83.5,
+    "fill_percentage": 17.79,
+    "total_weight_kg": 3.149,
+    "battery_percentage": 99.9,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 03:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 84.27,
+    "fill_percentage": 17.84,
+    "total_weight_kg": 3.157,
+    "battery_percentage": 99.9,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 04:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 84.35,
+    "fill_percentage": 17.9,
+    "total_weight_kg": 3.167,
+    "battery_percentage": 99.9,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 05:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 84.26,
+    "fill_percentage": 17.96,
+    "total_weight_kg": 3.175,
+    "battery_percentage": 99.8,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 06:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 84.58,
+    "fill_percentage": 18.13,
+    "total_weight_kg": 3.203,
+    "battery_percentage": 99.8,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 07:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 82.98,
+    "fill_percentage": 18.84,
+    "total_weight_kg": 3.306,
+    "battery_percentage": 99.8,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 08:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 83.7,
+    "fill_percentage": 19.87,
+    "total_weight_kg": 3.449,
+    "battery_percentage": 99.8,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 09:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 83.48,
+    "fill_percentage": 20.98,
+    "total_weight_kg": 3.643,
+    "battery_percentage": 99.7,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 10:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 81.09,
+    "fill_percentage": 22.56,
+    "total_weight_kg": 3.85,
+    "battery_percentage": 99.7,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 11:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 78.77,
+    "fill_percentage": 24.9,
+    "total_weight_kg": 4.312,
+    "battery_percentage": 99.7,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 12:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 77.14,
+    "fill_percentage": 27.74,
+    "total_weight_kg": 4.742,
+    "battery_percentage": 99.7,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 13:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 72.42,
+    "fill_percentage": 31.55,
+    "total_weight_kg": 5.404,
+    "battery_percentage": 99.6,
+    "status": "AVAILABLE"
+  },
+  {
+    "timestamp": "2026-09-01 14:00:00",
+    "bin_id": "BIN-VIT-01",
+    "bin_name": "Academic Block A - Main Lobby",
+    "distance_cm": 69.99,
+    "fill_percentage": 35.31,
+    "total_weight_kg": 6.181,
+    "battery_percentage": 99.6,
+    "status": "AVAILABLE"
+  }
+]

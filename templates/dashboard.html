@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dashboard — InWaster</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="{{ url_for('static', filename='favicon.svg') }}"
+    />
+    <link
+      rel="alternate icon"
+      type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}"
+    />
+    <script src="https://unpkg.com/html5-qrcode" type="text/javascript"></script>
+    <style>
+      :root {
+        --canvas: #fbfbfe;
+        --surface: #ffffff;
+        --surface-subtle: #f4f5f8;
+        --text-primary: #111827;
+        --text-secondary: #4b5563;
+        --text-muted: #9ca3af;
+        --border-color: #e5e7eb;
+        --accent: #10b981;
+        --accent-hover: #059669;
+        --accent-tint: #ecfdf5;
+        --radius-sm: 8px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+        --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.04), 0 4px 14px rgba(0, 0, 0, 0.02);
+      }
+
+      body {
+        background-color: var(--canvas);
+        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+        line-height: 1.5;
+        min-height: 100vh;
+      }
+
+      /* Navbar */
+      .dash-nav {
+        background: var(--surface);
+        border-bottom: 1px solid var(--border-color);
+        padding: 14px 0;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+      }
+      .brand-badge {
+        font-weight: 700;
+        font-size: 1.25rem;
+        letter-spacing: -0.5px;
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      /* Dashboard Shell */
+      .dash-container {
+        padding: 30px 15px 60px;
+        max-width: 1200px;
+        margin: 0 auto;
+      }
+
+      /* Balance Header Card */
+      .hero-balance-card {
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        border-radius: var(--radius-lg);
+        color: white;
+        padding: 32px;
+        margin-bottom: 30px;
+        box-shadow: 0 8px 24px rgba(16, 185, 129, 0.2);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-wrap: wrap;
+        gap: 20px;
+      }
+      .balance-label {
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 1px;
+        font-weight: 700;
+        opacity: 0.9;
+        margin-bottom: 4px;
+      }
+      .balance-val {
+        font-size: 3.5rem;
+        font-weight: 800;
+        line-height: 1;
+        letter-spacing: -1.5px;
+      }
+      .user-pill {
+        background: rgba(255, 255, 255, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.25);
+        padding: 8px 16px;
+        border-radius: 999px;
+        font-size: 0.88rem;
+        backdrop-filter: blur(4px);
+      }
+
+      /* Nav Tabs */
+      .custom-tabs {
+        border-bottom: 1px solid var(--border-color);
+        margin-bottom: 25px;
+        gap: 8px;
+        display: flex;
+        overflow-x: auto;
+      }
+      .custom-tab-btn {
+        background: transparent;
+        border: none;
+        padding: 12px 18px;
+        font-weight: 600;
+        font-size: 0.92rem;
+        color: var(--text-secondary);
+        border-bottom: 2px solid transparent;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        white-space: nowrap;
+      }
+      .custom-tab-btn:hover {
+        color: var(--accent);
+      }
+      .custom-tab-btn.active {
+        color: var(--accent);
+        border-bottom-color: var(--accent);
+      }
+
+      /* Surface Cards */
+      .panel-card {
+        background: var(--surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 28px;
+        box-shadow: var(--shadow-card);
+      }
+
+      /* Scanner View */
+      #reader {
+        width: 100%;
+        max-width: 520px;
+        margin: 0 auto;
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+      }
+
+      /* Simulator Card */
+      .sim-card {
+        background: #f9fafb;
+        border: 1px dashed var(--border-color);
+        border-radius: var(--radius-sm);
+        padding: 20px;
+        margin-top: 25px;
+      }
+
+      /* Fill Gauge */
+      .fill-meter {
+        height: 6px;
+        border-radius: 999px;
+        background: var(--surface-subtle);
+        overflow: hidden;
+        margin: 10px 0 6px;
+      }
+      .fill-fill {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.4s ease;
+      }
+
+      /* Coupons */
+      .coupon-box {
+        background: var(--surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: var(--shadow-card);
+        transition: transform 0.2s ease;
+      }
+      .coupon-box:hover {
+        transform: translateY(-2px);
+      }
+      .voucher-badge {
+        font-family: monospace;
+        background: #f3f4f6;
+        padding: 6px 12px;
+        border-radius: 6px;
+        font-weight: 700;
+        font-size: 1rem;
+        letter-spacing: 1px;
+        color: #111827;
+        display: inline-block;
+      }
+
+      /* Modal Overlay */
+      .custom-modal-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.45);
+        backdrop-filter: blur(4px);
+        display: none;
+        align-items: center;
+        justify-content: center;
+        z-index: 10000;
+      }
+      .custom-modal-box {
+        background: white;
+        border-radius: var(--radius-lg);
+        max-width: 440px;
+        width: 90%;
+        padding: 32px;
+        text-align: center;
+        box-shadow: 0 16px 36px rgba(0, 0, 0, 0.2);
+        animation: modalFadeIn 0.25s ease-out;
+      }
+      @keyframes modalFadeIn {
+        from {
+          opacity: 0;
+          transform: scale(0.96);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .btn-apple-sm {
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        padding: 8px 18px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.85rem;
+      }
+      .btn-apple-sm:hover {
+        background-color: var(--accent-hover);
+        color: white;
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="dash-nav">
+      <div class="container d-flex justify-content-between align-items-center">
+        <a href="{{ url_for('landing') }}" class="brand-badge d-flex align-items-center">
+          <img
+            src="{{ url_for('static', filename='favicon.svg') }}"
+            alt="InWaster Logo"
+            width="28"
+            height="28"
+            class="mr-2"
+            style="border-radius: 6px;"
+          />
+          InWaster
+        </a>
+        <div class="d-flex align-items-center">
+          {% if is_admin %}
+            <a href="{{ url_for('admin') }}" class="btn btn-outline-info btn-sm mr-2 font-weight-bold">
+              Admin Panel
+            </a>
+          {% endif %}
+          <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">
+            Sign Out
+          </a>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="dash-container">
+      <!-- Balance Header Card -->
+      <div class="hero-balance-card">
+        <div>
+          <div class="balance-label">Verified Recycle Balance</div>
+          <div class="balance-val" id="displayBalance">{{ score }}</div>
+          <small class="opacity-75">Points earned by verified physical waste disposal</small>
+        </div>
+        <div>
+          <div class="user-pill mb-2">
+            <strong>{{ name }}</strong> ({{ mail }})
+          </div>
+          <div class="text-right">
+            <span class="badge badge-light px-3 py-2 text-success font-weight-bold">
+              Account Active
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="custom-tabs">
+        <button class="custom-tab-btn active" onclick="switchTab('scannerTab')">
+          Scan &amp; Claim
+        </button>
+        <button class="custom-tab-btn" onclick="switchTab('binsTab')">
+          Smart Dustbins ({{ bins|length }})
+        </button>
+        <button class="custom-tab-btn" onclick="switchTab('rewardsTab')">
+          Partner Rewards ({{ coupons|length }})
+        </button>
+        <button class="custom-tab-btn" onclick="switchTab('vouchersTab')">
+          My Vouchers (<span id="voucherCount">{{ redemptions|length }}</span>)
+        </button>
+        <button class="custom-tab-btn" onclick="switchTab('ledgerTab')">
+          Points Ledger
+        </button>
+      </div>
+
+      <!-- TAB 1: SCANNER & CLAIM -->
+      <div id="scannerTab" class="tab-pane active">
+        <div class="panel-card">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+              <h3 class="h4 font-weight-bold mb-1">Scan Dustbin OLED QR Code</h3>
+              <p class="text-muted small mb-0">
+                After depositing waste into the smart bin, a 90-second dynamic QR code appears on the OLED screen.
+              </p>
+            </div>
+            <span class="badge badge-success px-3 py-2">Camera Active</span>
+          </div>
+
+          <!-- HTML5 QR Camera Scanner -->
+          <div id="reader"></div>
+
+          <!-- Simulation & Manual Claim Toolbar (for testing without camera) -->
+          <div class="sim-card">
+            <h6 class="font-weight-bold text-dark mb-1">Testing Simulator &amp; Manual Token Entry</h6>
+            <p class="text-muted small mb-3">
+              If testing on desktop without a webcam or testing the ESP32 integration, submit the token directly or simulate a deposit:
+            </p>
+
+            <div class="input-group mb-3">
+              <input
+                type="text"
+                id="manualTokenInput"
+                class="form-control"
+                placeholder="Enter claim token (e.g. INW-6011E92B9D6679DB or BIN-101)"
+              />
+              <div class="input-group-append">
+                <button class="btn btn-success font-weight-bold" onclick="submitManualToken()">
+                  Claim Token
+                </button>
+              </div>
+            </div>
+
+            <!-- Deposit Session Simulator -->
+            <div class="d-flex align-items-center justify-content-between p-3 bg-white rounded border">
+              <div>
+                <strong>Simulate ESP32 Deposit Session</strong>
+                <p class="small text-muted mb-0">Tests: Check Capacity &rarr; Scale 250g &rarr; Gate Cycle &rarr; Generate Real Token &rarr; Claim</p>
+              </div>
+              <button class="btn btn-outline-success btn-sm font-weight-bold" onclick="runSimulationDeposit()">
+                Run Test Deposit (+11 Pts)
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 2: SMART BINS FLEET -->
+      <div id="binsTab" class="tab-pane" style="display: none;">
+        <div class="panel-card">
+          <h3 class="h4 font-weight-bold mb-1">Campus Smart Dustbin Network</h3>
+          <p class="text-muted small mb-4">Live ultrasonic fill levels and operational status across VIT Bhopal.</p>
+
+          <div class="row">
+            {% for b in bins %}
+              <div class="col-md-4 mb-3">
+                <div class="p-3 border rounded">
+                  <div class="d-flex justify-content-between align-items-start mb-2">
+                    <div>
+                      <h5 class="h6 font-weight-bold mb-0">{{ b.name }}</h5>
+                      <small class="text-muted">{{ b.location }}</small>
+                    </div>
+                    {% if b.status == 'AVAILABLE' %}
+                      <span class="badge badge-success px-2 py-1">Available</span>
+                    {% elif b.status == 'NEARLY_FULL' %}
+                      <span class="badge badge-warning px-2 py-1">Nearly Full</span>
+                    {% else %}
+                      <span class="badge badge-danger px-2 py-1">Full</span>
+                    {% endif %}
+                  </div>
+
+                  <div class="d-flex justify-content-between small text-muted mt-2">
+                    <span>Fill Level</span>
+                    <strong class="text-dark">{{ b.fill_percentage }}%</strong>
+                  </div>
+                  <div class="fill-meter">
+                    <div
+                      class="fill-fill"
+                      style="width: {{ b.fill_percentage }}%; background: {% if b.fill_percentage >= 90 %}#ef4444{% elif b.fill_percentage >= 75 %}#f59e0b{% else %}#10b981{% endif %};"
+                    ></div>
+                  </div>
+
+                  <div class="d-flex justify-content-between small text-muted mt-3 pt-2 border-top">
+                    <span>Ultrasonic: <strong>{{ b.last_distance_cm }} cm</strong></span>
+                    <span>Total Deposits: <strong>{{ b.total_deposits }}</strong></span>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 3: PARTNER COUPONS -->
+      <div id="rewardsTab" class="tab-pane" style="display: none;">
+        <div class="panel-card">
+          <h3 class="h4 font-weight-bold mb-1">Partner Coupons &amp; Discounts</h3>
+          <p class="text-muted small mb-4">
+            Spend your verified recycle points for real voucher codes at configured partner stores.
+          </p>
+
+          <div class="row">
+            {% for c in coupons %}
+              <div class="col-md-4 col-sm-6 mb-4">
+                <div class="coupon-box">
+                  <div>
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                      <span class="badge badge-success px-2 py-1">{{ c.points_cost }} Points</span>
+                      <small class="text-muted font-weight-bold">{{ c.partner_category }}</small>
+                    </div>
+                    <h5 class="font-weight-bold mb-1">{{ c.title }}</h5>
+                    <small class="text-success font-weight-bold d-block mb-2">{{ c.partner_name }}</small>
+                    <p class="small text-muted mb-2">{{ c.description }}</p>
+                    <small class="text-muted d-block mb-3 font-italic">Terms: {{ c.terms }}</small>
+                  </div>
+
+                  <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                    <div>
+                      <span class="font-weight-bold text-dark">{{ c.discount_value }}</span>
+                      <small class="text-muted d-block">{{ c.inventory_remaining }} left</small>
+                    </div>
+                    <button
+                      class="btn-apple-sm"
+                      onclick="confirmRedeem('{{ c.id }}', '{{ c.title|escape }}', {{ c.points_cost }})"
+                    >
+                      Redeem
+                    </button>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 4: MY VOUCHERS -->
+      <div id="vouchersTab" class="tab-pane" style="display: none;">
+        <div class="panel-card">
+          <h3 class="h4 font-weight-bold mb-1">My Redeemed Vouchers</h3>
+          <p class="text-muted small mb-4">Present these codes at partner stores to apply your discount.</p>
+
+          <div id="vouchersList">
+            {% if not redemptions %}
+              <div class="alert alert-light border py-4 text-center text-muted" id="noVouchersAlert">
+                You have not redeemed any vouchers yet. Earn points by recycling and redeem them in the Rewards catalog!
+              </div>
+            {% else %}
+              <div class="row">
+                {% for r in redemptions %}
+                  <div class="col-md-6 mb-3">
+                    <div class="p-3 border rounded bg-white">
+                      <div class="d-flex justify-content-between align-items-start mb-2">
+                        <div>
+                          <h6 class="font-weight-bold mb-0">{{ r.coupon_title }}</h6>
+                          <small class="text-success font-weight-bold">{{ r.partner_name }}</small>
+                        </div>
+                        <span class="badge badge-primary px-2 py-1">{{ r.discount_value }}</span>
+                      </div>
+                      <div class="my-2">
+                        <span class="voucher-badge">{{ r.voucher_code }}</span>
+                      </div>
+                      <div class="d-flex justify-content-between small text-muted mt-2 pt-2 border-top">
+                        <span>Spent: {{ r.points_spent }} pts</span>
+                        <span>Expires: {{ r.expires_at[:10] }}</span>
+                      </div>
+                    </div>
+                  </div>
+                {% endfor %}
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- TAB 5: POINTS LEDGER -->
+      <div id="ledgerTab" class="tab-pane" style="display: none;">
+        <div class="panel-card">
+          <h3 class="h4 font-weight-bold mb-1">Auditable Points Ledger</h3>
+          <p class="text-muted small mb-4">Every points credit and debit is permanently recorded.</p>
+
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Type</th>
+                  <th>Change</th>
+                  <th>Balance After</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody id="ledgerTableBody">
+                {% for entry in ledger %}
+                  <tr>
+                    <td class="small text-muted">{{ entry.created_at }}</td>
+                    <td>
+                      {% if entry.delta > 0 %}
+                        <span class="badge badge-success px-2 py-1">EARNED</span>
+                      {% else %}
+                        <span class="badge badge-secondary px-2 py-1">REDEEMED</span>
+                      {% endif %}
+                    </td>
+                    <td class="font-weight-bold {% if entry.delta > 0 %}text-success{% else %}text-danger{% endif %}">
+                      {% if entry.delta > 0 %}+{% endif %}{{ entry.delta }}
+                    </td>
+                    <td class="font-weight-bold">{{ entry.balance_after }}</td>
+                    <td class="small text-muted">{{ entry.description }}</td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL: SUCCESS / RESPONSE ALERT -->
+    <div class="custom-modal-overlay" id="responseModal">
+      <div class="custom-modal-box">
+        <h4 class="font-weight-bold mb-2 text-dark" id="modalTitle">Notification</h4>
+        <p class="text-muted small mb-4" id="modalMessage">Your deposit points have been credited.</p>
+        <button class="btn btn-success px-4" onclick="closeModal()">Continue</button>
+      </div>
+    </div>
+
+    <script>
+      let scanningAllowed = true;
+
+      function switchTab(tabId) {
+        document.querySelectorAll('.tab-pane').forEach((el) => (el.style.display = 'none'));
+        document.querySelectorAll('.custom-tab-btn').forEach((el) => el.classList.remove('active'));
+
+        document.getElementById(tabId).style.display = 'block';
+        event.currentTarget.classList.add('active');
+      }
+
+      function onScanSuccess(decodedText) {
+        if (!scanningAllowed) return;
+        scanningAllowed = false;
+        console.log("Scanned code:", decodedText);
+        claimToken(decodedText);
+      }
+
+      function onScanFailure(error) {
+        // Continuous scanner frame error; ignore
+      }
+
+      function submitManualToken() {
+        const input = document.getElementById("manualTokenInput");
+        const val = input.value.trim();
+        if (val) {
+          claimToken(val);
+          input.value = "";
+        }
+      }
+
+      function claimToken(token) {
+        fetch("/api/v1/reward-claims", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ token: token }),
+        })
+          .then((res) => res.json().then((data) => ({ status: res.status, body: data })))
+          .then(({ status, body }) => {
+            if (status === 200 && body.status === "success") {
+              // Update balance
+              document.getElementById("displayBalance").innerText = body.new_balance;
+              showModal("Reward Claimed", body.message || `+${body.points_earned} points credited!`);
+            } else {
+              showModal("Claim Notice", body.error || "Unable to claim reward.");
+            }
+          })
+          .catch((err) => {
+            console.error("Claim error:", err);
+            // Backward-compatible fallback
+            fetch("/processQR", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ data: token }),
+            })
+              .then((res) => res.json())
+              .then((data) => {
+                if (data.status === "success") {
+                  document.getElementById("displayBalance").innerText = data.score;
+                  showModal("Reward Claimed", data.message);
+                } else {
+                  showModal("Claim Notice", data.message || "Failed to process scan.");
+                }
+              })
+              .catch(() => showModal("Error", "Network error connecting to backend."));
+          })
+          .finally(() => {
+            setTimeout(() => {
+              scanningAllowed = true;
+            }, 2000);
+          });
+      }
+
+      function runSimulationDeposit() {
+        // 1. Authenticate device and start deposit session
+        fetch("/api/v1/devices/BIN-VIT-01/deposit-sessions", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-Device-Token": "inwaster_dev_token_vit01_2026",
+          },
+        })
+          .then((res) => res.json())
+          .then((sessionData) => {
+            if (!sessionData.session_id) {
+              throw new Error(sessionData.error || "Failed to start session");
+            }
+            const sessionId = sessionData.session_id;
+
+            // 2. Complete deposit with 250g weight
+            return fetch(`/api/v1/devices/BIN-VIT-01/deposit-sessions/${sessionId}/complete`, {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Device-Token": "inwaster_dev_token_vit01_2026",
+              },
+              body: JSON.stringify({ weight_grams: 250.0, weight_stable: true }),
+            });
+          })
+          .then((res) => res.json())
+          .then((completeData) => {
+            if (!completeData.claim_token) {
+              throw new Error(completeData.error || "Failed to complete deposit");
+            }
+            // 3. User claims the generated token
+            claimToken(completeData.claim_token);
+          })
+          .catch((err) => {
+            showModal("Simulation Error", err.message);
+          });
+      }
+
+      function confirmRedeem(couponId, title, cost) {
+        if (!confirm(`Redeem "${title}" for ${cost} points?`)) return;
+
+        fetch(`/api/v1/coupons/${couponId}/redemptions`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+        })
+          .then((res) => res.json().then((data) => ({ status: res.status, body: data })))
+          .then(({ status, body }) => {
+            if (status === 200 && body.status === "success") {
+              document.getElementById("displayBalance").innerText = body.new_balance;
+              showModal(
+                "Voucher Unlocked",
+                `Code: ${body.voucher_code} (Spent ${cost} points). View it anytime in 'My Vouchers'.`
+              );
+              // Reload page after modal to refresh vouchers & ledger
+              setTimeout(() => location.reload(), 2500);
+            } else {
+              showModal("Redemption Notice", body.error || "Could not redeem coupon.");
+            }
+          })
+          .catch((err) => {
+            showModal("Error", "Failed to communicate with server.");
+          });
+      }
+
+      function showModal(title, message) {
+        document.getElementById("modalTitle").innerText = title;
+        document.getElementById("modalMessage").innerText = message;
+        document.getElementById("responseModal").style.display = "flex";
+      }
+
+      function closeModal() {
+        document.getElementById("responseModal").style.display = "none";
+      }
+
+      // Initialize HTML5 QR Code Scanner
+      const html5QrcodeScanner = new Html5QrcodeScanner(
+        "reader",
+        { fps: 15, qrbox: { width: 250, height: 250 }, aspectRatio: 1.0 },
+        false
+      );
+      html5QrcodeScanner.render(onScanSuccess, onScanFailure);
+    </script>
+  </body>
+</html>

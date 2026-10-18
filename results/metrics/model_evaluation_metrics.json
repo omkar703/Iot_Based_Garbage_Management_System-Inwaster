@@ -1,0 +1,26 @@
+{
+  "Baseline (Lag-1 Persistence)": {
+    "RMSE (% fill)": 14.709,
+    "MAE (% fill)": 4.855,
+    "R2 Score": 0.7063,
+    "MAPE (%)": 65.95
+  },
+  "Ridge Linear Regression": {
+    "RMSE (% fill)": 14.418,
+    "MAE (% fill)": 7.738,
+    "R2 Score": 0.7178,
+    "MAPE (%)": 68.37
+  },
+  "Random Forest Regressor": {
+    "RMSE (% fill)": 9.884,
+    "MAE (% fill)": 4.047,
+    "R2 Score": 0.8674,
+    "MAPE (%)": 19.55
+  },
+  "Gradient Boosting Regressor": {
+    "RMSE (% fill)": 10.767,
+    "MAE (% fill)": 3.721,
+    "R2 Score": 0.8427,
+    "MAPE (%)": 23.66
+  }
+}

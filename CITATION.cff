@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you use this software, empirical datasets, or predictive models in academic research, please cite it as below."
+authors:
+  - family-names: "Phadatare"
+    given-names: "Omkar"
+    affiliation: "Vellore Institute of Technology"
+title: "InWaster: IoT-Enabled Smart Waste Characterization, Fill-Level Time-Series Forecasting, and Automated Incentive Ledger"
+version: "1.0.0"
+date-released: "2026-10-18"
+license: "MIT"
+repository-code: "https://github.com/omkar703/Iot_Based_Garbage_Management_System-Inwaster"
+keywords:
+  - "smart-city"
+  - "waste-management"
+  - "iot"
+  - "esp32"
+  - "machine-learning"
+  - "time-series-forecasting"
+  - "circular-economy"
+  - "incentive-ledger"

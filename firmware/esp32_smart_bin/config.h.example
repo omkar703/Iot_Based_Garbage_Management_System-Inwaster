@@ -1,0 +1,58 @@
+#ifndef CONFIG_H
+#define CONFIG_H
+
+// =============================================================================
+// INWASTER SMART DUSTBIN HARDWARE & NETWORK CONFIGURATION TEMPLATE
+// =============================================================================
+
+// --- WiFi Credentials ---
+#define WIFI_SSID           "CAMPUS_WIFI_SSID"
+#define WIFI_PASSWORD       "CAMPUS_WIFI_PASSWORD"
+
+// --- InWaster Backend API ---
+// For development: use your machine's IP (e.g. "http://192.168.1.100:5000")
+// For production: use HTTPS domain (e.g. "https://inwaster.campus.edu")
+#define BACKEND_BASE_URL    "http://192.168.1.100:5000"
+#define DEVICE_ID           "BIN-VIT-01"
+#define DEVICE_AUTH_TOKEN   "inwaster_dev_token_vit01_2026"
+
+// --- GPIO Pinout Definitions (ESP32 NodeMCU-32S) ---
+// Ultrasonic Sensor (HC-SR04)
+// NOTE: Echo output operates at 5V. Use a voltage divider (1k / 2k) to step down to 3.3V for GPIO 18!
+#define PIN_ULTRASONIC_TRIG 5
+#define PIN_ULTRASONIC_ECHO 18
+
+// Load Cell Sensor (HX711 24-bit ADC)
+#define PIN_HX711_DOUT      19
+#define PIN_HX711_SCK       23
+
+// Servo Motor (PWM Pin for SG90 / MG996R gate mechanism)
+#define PIN_SERVO_PWM       13
+
+// OLED Display (I2C SSD1306 128x64)
+#define OLED_I2C_SDA        21
+#define OLED_I2C_SCL        22
+#define OLED_I2C_ADDRESS    0x3C
+#define OLED_SCREEN_WIDTH   128
+#define OLED_SCREEN_HEIGHT  64
+
+// --- Ultrasonic Capacity Calibration ---
+#define EMPTY_DISTANCE_CM   100.0f  // Distance from sensor to empty container bottom
+#define FULL_DISTANCE_CM    15.0f   // Distance when bin is 100% full
+#define FULL_THRESHOLD_PCT  90.0f   // Percent fill to refuse deposits
+
+// --- Weight Sensor Calibration ---
+#define HX711_CALIBRATION_FACTOR  -420.0f  // Adjust based on calibration with known weight
+#define MIN_DEPOSIT_WEIGHT_GRAMS  5.0f     // Minimum weight to trigger reward
+#define MAX_DEPOSIT_WEIGHT_GRAMS  10000.0f // Maximum safe platform load
+
+// --- Servo Angles ---
+#define SERVO_CLOSED_ANGLE  0
+#define SERVO_OPEN_ANGLE    90
+#define GATE_OPEN_HOLD_MS   4000   // Time gate remains open for deposit
+
+// --- Timeouts ---
+#define TELEMETRY_INTERVAL_MS   30000  // Heartbeat every 30 seconds
+#define QR_CLAIM_TIMEOUT_MS     90000  // 90 seconds OLED QR expiration
+
+#endif // CONFIG_H

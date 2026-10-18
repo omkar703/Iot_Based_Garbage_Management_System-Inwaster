@@ -1,0 +1,152 @@
+[
+  {
+    "session_id": "DEP-1001",
+    "timestamp": "2026-09-01 08:24:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 256,
+    "weight_stable": true,
+    "points_awarded": 15,
+    "claim_token": "INW-41263CD7BEC0671B",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1002",
+    "timestamp": "2026-09-01 09:41:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 351,
+    "weight_stable": true,
+    "points_awarded": 17,
+    "claim_token": "INW-5C049E73FA4FA79E",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1003",
+    "timestamp": "2026-09-01 10:21:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 409,
+    "weight_stable": true,
+    "points_awarded": 18,
+    "claim_token": "INW-E4D7BCB5EFBB6355",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1004",
+    "timestamp": "2026-09-01 10:00:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 413,
+    "weight_stable": true,
+    "points_awarded": 18,
+    "claim_token": "INW-67BA7289E458728A",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1005",
+    "timestamp": "2026-09-01 10:04:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 264,
+    "weight_stable": true,
+    "points_awarded": 15,
+    "claim_token": "INW-FCB2574038544670",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1006",
+    "timestamp": "2026-09-01 11:31:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 340,
+    "weight_stable": true,
+    "points_awarded": 16,
+    "claim_token": "INW-A7B54A7228B73BB1",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1007",
+    "timestamp": "2026-09-01 12:41:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 491,
+    "weight_stable": true,
+    "points_awarded": 19,
+    "claim_token": "INW-3EC89D52786AE2F3",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1008",
+    "timestamp": "2026-09-01 12:56:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 340,
+    "weight_stable": true,
+    "points_awarded": 16,
+    "claim_token": "INW-D0365522BC6A0F02",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1009",
+    "timestamp": "2026-09-01 12:19:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 208,
+    "weight_stable": true,
+    "points_awarded": 14,
+    "claim_token": "INW-F3625B3D4D265389",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1010",
+    "timestamp": "2026-09-01 13:56:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 316,
+    "weight_stable": true,
+    "points_awarded": 16,
+    "claim_token": "INW-7281290A1D7F4C78",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1011",
+    "timestamp": "2026-09-01 14:31:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 126,
+    "weight_stable": true,
+    "points_awarded": 12,
+    "claim_token": "INW-40A65362728A5B42",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1012",
+    "timestamp": "2026-09-01 14:40:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 134,
+    "weight_stable": true,
+    "points_awarded": 12,
+    "claim_token": "INW-D9ADEFD6B655A3D2",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1013",
+    "timestamp": "2026-09-01 14:11:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 148,
+    "weight_stable": true,
+    "points_awarded": 12,
+    "claim_token": "INW-AA428C0989A0BDA0",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1014",
+    "timestamp": "2026-09-01 15:00:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 691,
+    "weight_stable": true,
+    "points_awarded": 23,
+    "claim_token": "INW-ECDC1C316553A1C0",
+    "state": "CLAIMED"
+  },
+  {
+    "session_id": "DEP-1015",
+    "timestamp": "2026-09-01 16:04:00",
+    "bin_id": "BIN-VIT-01",
+    "weight_grams": 94,
+    "weight_stable": true,
+    "points_awarded": 11,
+    "claim_token": "INW-08A3B5830644A3C0",
+    "state": "CLAIMED"
+  }
+]

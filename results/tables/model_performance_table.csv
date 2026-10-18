@@ -1,0 +1,5 @@
+,RMSE (% fill),MAE (% fill),R2 Score,MAPE (%)
+Baseline (Lag-1 Persistence),14.709,4.855,0.7063,65.95
+Ridge Linear Regression,14.418,7.738,0.7178,68.37
+Random Forest Regressor,9.884,4.047,0.8674,19.55
+Gradient Boosting Regressor,10.767,3.721,0.8427,23.66

@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>InWaster — Smart Waste Disposal & Rewards</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="{{ url_for('static', filename='favicon.svg') }}"
+    />
+    <link
+      rel="alternate icon"
+      type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}"
+    />
+    <style>
+      :root {
+        --canvas: #fbfbfe;
+        --surface: #ffffff;
+        --surface-subtle: #f4f5f8;
+        --text-primary: #111827;
+        --text-secondary: #4b5563;
+        --text-muted: #9ca3af;
+        --border-color: #e5e7eb;
+        --accent: #10b981;
+        --accent-hover: #059669;
+        --accent-tint: #ecfdf5;
+        --radius-sm: 8px;
+        --radius-md: 14px;
+        --radius-lg: 20px;
+        --shadow-soft: 0 4px 20px rgba(0, 0, 0, 0.04);
+        --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.05), 0 6px 16px rgba(0, 0, 0, 0.03);
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        background-color: var(--canvas);
+        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        line-height: 1.6;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* Navbar */
+      .navbar-apple {
+        background: rgba(255, 255, 255, 0.92);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border-color);
+        padding: 16px 0;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+      }
+      .brand-badge {
+        font-weight: 700;
+        font-size: 1.25rem;
+        letter-spacing: -0.5px;
+        color: var(--text-primary);
+        display: inline-flex;
+        align-items: center;
+        text-decoration: none;
+      }
+      .brand-dot {
+        width: 8px;
+        height: 8px;
+        background: var(--accent);
+        border-radius: 50%;
+        margin-left: 4px;
+        display: inline-block;
+      }
+
+      /* Hero Section */
+      .hero-section {
+        padding: 90px 0 60px;
+        text-align: center;
+      }
+      .eyebrow {
+        color: var(--accent-hover);
+        background: var(--accent-tint);
+        padding: 6px 14px;
+        border-radius: 999px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        letter-spacing: 0.3px;
+        display: inline-block;
+        margin-bottom: 20px;
+        border: 1px solid rgba(16, 185, 129, 0.2);
+      }
+      .hero-title {
+        font-size: 3.25rem;
+        font-weight: 800;
+        letter-spacing: -1.2px;
+        line-height: 1.15;
+        color: var(--text-primary);
+        max-width: 800px;
+        margin: 0 auto 20px;
+      }
+      .hero-subtitle {
+        font-size: 1.2rem;
+        color: var(--text-secondary);
+        max-width: 620px;
+        margin: 0 auto 35px;
+        font-weight: 400;
+      }
+      .btn-apple {
+        background-color: var(--accent);
+        color: white;
+        border: none;
+        padding: 12px 28px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-apple:hover {
+        background-color: var(--accent-hover);
+        color: white;
+        transform: translateY(-1px);
+        box-shadow: 0 4px 12px rgba(16, 185, 129, 0.25);
+        text-decoration: none;
+      }
+      .btn-apple-outline {
+        background-color: transparent;
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+        padding: 12px 26px;
+        border-radius: 999px;
+        font-weight: 600;
+        font-size: 0.95rem;
+        transition: all 0.2s ease;
+        text-decoration: none;
+        display: inline-block;
+      }
+      .btn-apple-outline:hover {
+        background-color: var(--surface-subtle);
+        color: var(--text-primary);
+        text-decoration: none;
+      }
+
+      /* Process Cards */
+      .section-title {
+        font-size: 2rem;
+        font-weight: 700;
+        letter-spacing: -0.6px;
+        margin-bottom: 10px;
+      }
+      .section-subtitle {
+        color: var(--text-secondary);
+        margin-bottom: 40px;
+      }
+      .step-card {
+        background: var(--surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 30px;
+        height: 100%;
+        box-shadow: var(--shadow-card);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+      .step-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+      }
+      .step-number {
+        font-size: 0.85rem;
+        font-weight: 700;
+        color: var(--accent);
+        background: var(--accent-tint);
+        width: 32px;
+        height: 32px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-bottom: 18px;
+      }
+      .step-title {
+        font-size: 1.15rem;
+        font-weight: 700;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+      }
+      .step-desc {
+        color: var(--text-secondary);
+        font-size: 0.92rem;
+        margin-bottom: 0;
+      }
+
+      /* Smart Bin Fleet Grid */
+      .bin-card {
+        background: var(--surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        margin-bottom: 20px;
+        box-shadow: var(--shadow-card);
+      }
+      .bin-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin-bottom: 12px;
+      }
+      .bin-name {
+        font-weight: 700;
+        font-size: 1.05rem;
+        margin-bottom: 4px;
+      }
+      .bin-location {
+        color: var(--text-muted);
+        font-size: 0.85rem;
+      }
+      .status-pill {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 10px;
+        border-radius: 999px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+      .status-available {
+        background: #ecfdf5;
+        color: #059669;
+        border: 1px solid rgba(5, 150, 105, 0.2);
+      }
+      .status-nearly-full {
+        background: #fffbeb;
+        color: #d97706;
+        border: 1px solid rgba(217, 119, 6, 0.2);
+      }
+      .status-full {
+        background: #fef2f2;
+        color: #dc2626;
+        border: 1px solid rgba(220, 38, 38, 0.2);
+      }
+      .fill-meter {
+        height: 6px;
+        border-radius: 999px;
+        background: var(--surface-subtle);
+        overflow: hidden;
+        margin: 12px 0 6px;
+      }
+      .fill-fill {
+        height: 100%;
+        border-radius: 999px;
+        transition: width 0.4s ease;
+      }
+
+      /* Partners Section */
+      .coupon-card {
+        background: var(--surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        box-shadow: var(--shadow-card);
+      }
+      .points-pill {
+        background: var(--accent-tint);
+        color: var(--accent-hover);
+        font-weight: 700;
+        font-size: 0.8rem;
+        padding: 4px 10px;
+        border-radius: 999px;
+      }
+
+      /* Footer */
+      footer {
+        border-top: 1px solid var(--border-color);
+        padding: 50px 0 30px;
+        color: var(--text-secondary);
+        font-size: 0.9rem;
+        background: var(--surface);
+        margin-top: 80px;
+      }
+
+      @media (max-width: 768px) {
+        .hero-title {
+          font-size: 2.25rem;
+        }
+        .hero-subtitle {
+          font-size: 1.05rem;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar-apple">
+      <div class="container d-flex justify-content-between align-items-center">
+        <a href="{{ url_for('landing') }}" class="brand-badge d-flex align-items-center">
+          <img
+            src="{{ url_for('static', filename='favicon.svg') }}"
+            alt="InWaster Logo"
+            width="28"
+            height="28"
+            class="mr-2"
+            style="border-radius: 6px;"
+          />
+          InWaster
+        </a>
+        <div class="d-flex align-items-center">
+          {% if user %}
+            <a href="{{ url_for('dashboard') }}" class="btn-apple mr-2">Open Dashboard</a>
+            <a href="{{ url_for('logout') }}" class="btn-apple-outline">Sign Out</a>
+          {% else %}
+            <a href="{{ url_for('login') }}" class="btn-apple-outline mr-2">Sign In</a>
+            <a href="{{ url_for('signup') }}" class="btn-apple">Get Started</a>
+          {% endif %}
+        </div>
+      </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <span class="eyebrow">Smart Dustbin IoT & Rewards Platform</span>
+        <h1 class="hero-title">Deposit responsibly.<br>Earn tangible daily rewards.</h1>
+        <p class="hero-subtitle">
+          InWaster connects university campus smart dustbins with an automated reward ledger.
+          Place waste on the weighing scale, deposit, scan the dynamic OLED QR code, and redeem authentic partner discounts.
+        </p>
+        <div class="d-flex justify-content-center gap-3">
+          {% if user %}
+            <a href="{{ url_for('dashboard') }}" class="btn-apple mr-2">Go to My Rewards</a>
+          {% else %}
+            <a href="{{ url_for('signup') }}" class="btn-apple mr-2">Start Recycling</a>
+            <a href="#how-it-works" class="btn-apple-outline">Learn the System</a>
+          {% endif %}
+        </div>
+      </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">The Engineered Deposit Workflow</h2>
+          <p class="section-subtitle">A synchronized sequence between ESP32 hardware, sensor validation, and backend security.</p>
+        </div>
+
+        <div class="row">
+          <div class="col-md-3 mb-4">
+            <div class="step-card">
+              <div class="step-number">1</div>
+              <h3 class="step-title">Capacity & Weighing</h3>
+              <p class="step-desc">
+                Ultrasonic sensors verify bin capacity while high-precision load cells measure stable waste weight.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="step-card">
+              <div class="step-number">2</div>
+              <h3 class="step-title">Safe Gate Operation</h3>
+              <p class="step-desc">
+                Upon backend approval, the servo mechanism opens for safe disposal and returns to the closed position.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="step-card">
+              <div class="step-number">3</div>
+              <h3 class="step-title">Short-Lived OLED QR</h3>
+              <p class="step-desc">
+                An ephemeral 90-second cryptographic token renders as a QR code directly on the dustbin's OLED display.
+              </p>
+            </div>
+          </div>
+          <div class="col-md-3 mb-4">
+            <div class="step-card">
+              <div class="step-number">4</div>
+              <h3 class="step-title">Points & Vouchers</h3>
+              <p class="step-desc">
+                Scan via camera to credit your auditable points ledger and redeem real discounts from partner businesses.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Campus Fleet Availability -->
+    <section class="py-5" style="background: var(--surface);">
+      <div class="container">
+        <div class="d-flex justify-content-between align-items-end mb-4">
+          <div>
+            <h2 class="section-title mb-1">Campus Smart Dustbins</h2>
+            <p class="text-muted mb-0">Live ultrasonic capacity status and operational availability.</p>
+          </div>
+          <span class="badge badge-light px-3 py-2 border font-weight-bold">Live Sensor Stream</span>
+        </div>
+
+        <div class="row">
+          {% for b in bins %}
+            <div class="col-md-4">
+              <div class="bin-card">
+                <div class="bin-header">
+                  <div>
+                    <div class="bin-name">{{ b.name }}</div>
+                    <div class="bin-location">{{ b.location }}</div>
+                  </div>
+                  {% if b.status == 'AVAILABLE' %}
+                    <span class="status-pill status-available">Available</span>
+                  {% elif b.status == 'NEARLY_FULL' %}
+                    <span class="status-pill status-nearly-full">Nearly Full</span>
+                  {% else %}
+                    <span class="status-pill status-full">Full</span>
+                  {% endif %}
+                </div>
+
+                <div class="d-flex justify-content-between small text-muted mt-3">
+                  <span>Current Fill</span>
+                  <span class="font-weight-bold text-dark">{{ b.fill_percentage }}%</span>
+                </div>
+                <div class="fill-meter">
+                  <div
+                    class="fill-fill"
+                    style="width: {{ b.fill_percentage }}%; background: {% if b.fill_percentage >= 90 %}#ef4444{% elif b.fill_percentage >= 75 %}#f59e0b{% else %}#10b981{% endif %};"
+                  ></div>
+                </div>
+
+                <div class="d-flex justify-content-between small text-muted mt-3 pt-2 border-top">
+                  <span>Deposits: <strong>{{ b.total_deposits }}</strong></span>
+                  <span>Battery: <strong>{{ b.battery_percentage }}%</strong></span>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Partner Rewards Preview -->
+    <section class="py-5">
+      <div class="container">
+        <div class="text-center mb-5">
+          <h2 class="section-title">Verified Partner Rewards</h2>
+          <p class="section-subtitle">Exchange your earned recycle points for discounts at genuine campus businesses.</p>
+        </div>
+
+        <div class="row">
+          {% for c in coupons %}
+            <div class="col-md-3 col-sm-6 mb-4">
+              <div class="coupon-card">
+                <div>
+                  <div class="d-flex justify-content-between align-items-center mb-3">
+                    <span class="points-pill">{{ c.points_cost }} Points</span>
+                    <span class="badge badge-light border text-muted small">{{ c.partner_category }}</span>
+                  </div>
+                  <h4 class="font-weight-bold h5 mb-1">{{ c.title }}</h4>
+                  <small class="text-success font-weight-bold d-block mb-2">{{ c.partner_name }}</small>
+                  <p class="small text-muted mb-3">{{ c.description }}</p>
+                </div>
+                <div class="pt-3 border-top d-flex justify-content-between align-items-center">
+                  <span class="h6 font-weight-bold text-dark mb-0">{{ c.discount_value }}</span>
+                  <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-outline-success font-weight-bold">Redeem</a>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+      <div class="container text-center">
+        <div class="brand-badge mb-2 justify-content-center d-flex align-items-center">
+          <img
+            src="{{ url_for('static', filename='favicon.svg') }}"
+            alt="InWaster Logo"
+            width="24"
+            height="24"
+            class="mr-2"
+            style="border-radius: 5px;"
+          />
+          InWaster
+        </div>
+        <p class="small text-muted mb-3">
+          Campus Smart Dustbin IoT & Reward Ledger Platform &bull; VIT Bhopal University Ecosystem
+        </p>
+        <p class="small text-muted mb-0">
+          Engineered for verifiable waste recycling, anti-fraud ephemeral QR tokens, and atomic coupon redemption.
+        </p>
+      </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  </body>
+</html>

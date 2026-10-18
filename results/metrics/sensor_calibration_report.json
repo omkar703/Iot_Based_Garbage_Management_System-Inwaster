@@ -1,0 +1,19 @@
+{
+  "ultrasonic_sensor": "HC-SR04",
+  "speed_of_sound_at_20c_ms": 343.2,
+  "resolution_cm": 0.3,
+  "effective_linear_range_cm": [
+    10.0,
+    150.0
+  ],
+  "weight_scale": "HX711 24-bit ADC Load Cell",
+  "load_cell_capacity_kg": 20.0,
+  "drift_stability_grams": "< 1.5g across 24h",
+  "token_crypto_primitive": "HMAC-SHA256 Ephemeral Single-Use",
+  "token_validity_window_seconds": 90,
+  "evaluated_nodes": [
+    "BIN-VIT-01",
+    "BIN-VIT-02",
+    "BIN-VIT-03"
+  ]
+}

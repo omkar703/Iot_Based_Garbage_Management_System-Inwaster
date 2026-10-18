@@ -1,76 +1,375 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>INWASTER Admin</title>
-    <!-- Bootstrap CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Admin Portal — InWaster Fleet & Audit</title>
+    <link
+      href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="{{ url_for('static', filename='favicon.svg') }}"
+    />
+    <link
+      rel="alternate icon"
+      type="image/png"
+      href="{{ url_for('static', filename='favicon.png') }}"
+    />
     <style>
-        /* Custom styling for the sidebar */
-        #sidebar {
-            height: 100%;
-            width: 250px;
-            position: fixed;
-            background-color: #f8f9fa;
-            padding-top: 15px;
-            border-right: 1px solid #dee2e6;
+      :root {
+        --canvas: #f4f6f9;
+        --surface: #ffffff;
+        --text-primary: #111827;
+        --text-secondary: #4b5563;
+        --border-color: #e5e7eb;
+        --accent: #10b981;
+        --radius-md: 12px;
+        --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.04);
+      }
+      body {
+        background-color: var(--canvas);
+        color: var(--text-primary);
+        font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+      }
+      .admin-sidebar {
+        width: 260px;
+        background: #1e293b;
+        color: #f8fafc;
+        min-height: 100vh;
+        position: fixed;
+        padding: 24px;
+      }
+      .admin-content {
+        margin-left: 260px;
+        padding: 32px;
+      }
+      .brand-title {
+        color: #34d399;
+        font-weight: 800;
+        font-size: 1.3rem;
+        letter-spacing: -0.5px;
+      }
+      .nav-pills-custom a {
+        color: #94a3b8;
+        padding: 10px 14px;
+        border-radius: 8px;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 4px;
+        text-decoration: none;
+        transition: all 0.2s;
+      }
+      .nav-pills-custom a:hover,
+      .nav-pills-custom a.active {
+        background: #334155;
+        color: #34d399;
+      }
+      .metric-card {
+        background: var(--surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 20px;
+        box-shadow: var(--shadow-card);
+      }
+      .table-card {
+        background: var(--surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        padding: 24px;
+        margin-bottom: 30px;
+        box-shadow: var(--shadow-card);
+      }
+      .state-pill {
+        font-size: 0.75rem;
+        font-weight: 700;
+        padding: 4px 8px;
+        border-radius: 999px;
+        letter-spacing: 0.5px;
+      }
+      .state-CLAIMED { background: #ecfdf5; color: #059669; }
+      .state-QR_AVAILABLE { background: #eff6ff; color: #2563eb; }
+      .state-DEPOSIT_APPROVED { background: #fef3c7; color: #d97706; }
+      .state-DEPOSIT_FAILED { background: #fef2f2; color: #dc2626; }
+      @media (max-width: 768px) {
+        .admin-sidebar {
+          position: static;
+          width: 100%;
+          min-height: auto;
         }
-
-        #content {
-            margin-left: 250px;
-            padding: 15px;
+        .admin-content {
+          margin-left: 0;
+          padding: 15px;
         }
-        .tbl{
-            margin-top: 30px;
-            height: 70vh;
-            width: calc(95vw - 250px);
-        }
+      }
     </style>
-</head>
-<body>
-
-<div class="d-flex" id="wrapper">
+  </head>
+  <body>
     <!-- Sidebar -->
-    <div class="bg-light" id="sidebar">
-        <h1 class="text-center">INWASTER</h1>
-        <div class="list-group">
-            <a href="{{ url_for('admin') }}" class="list-group-item list-group-item-action">Home</a>
-        </div>
-        <div class="list-group">
-            <a href="{{ url_for('login') }}" class="list-group-item list-group-item-action">Logout</a>
-        </div>
+    <div class="admin-sidebar">
+      <div class="d-flex align-items-center mb-1">
+        <img
+          src="{{ url_for('static', filename='favicon.svg') }}"
+          alt="InWaster Logo"
+          width="26"
+          height="26"
+          class="mr-2"
+          style="border-radius: 6px;"
+        />
+        <span class="brand-title">INWASTER</span>
+      </div>
+      <small class="text-muted d-block mb-4">IoT Admin &amp; Audit Portal</small>
+
+      <div class="nav-pills-custom">
+        <a href="#fleet-section" class="active">Smart Bin Fleet</a>
+        <a href="#sessions-section">Deposit Sessions</a>
+        <a href="#ledger-section">Points Ledger Audit</a>
+        <a href="#users-section">User Directory</a>
+        <a href="#telemetry-section">Raw Telemetry Stream</a>
+        <a href="{{ url_for('dashboard') }}" class="text-info mt-4">User Dashboard &rarr;</a>
+        <a href="{{ url_for('logout') }}" class="text-danger">Sign Out</a>
+      </div>
     </div>
 
-    <div id="content">
-        <h2>Hardware logs</h2>
-        <div class="tbl">
-            <table class="table">
-                <thead>
+    <!-- Main Content Area -->
+    <div class="admin-content">
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+          <h1 class="h3 font-weight-bold mb-1">Fleet Telemetry & Security Audit</h1>
+          <p class="text-muted small mb-0">Authorized Admin: <strong>{{ admin_mail }}</strong></p>
+        </div>
+        <a href="{{ url_for('logout') }}" class="btn btn-outline-danger btn-sm">Log Out</a>
+      </div>
+
+      <!-- Metrics Row -->
+      <div class="row mb-4">
+        <div class="col-md-3 mb-2">
+          <div class="metric-card">
+            <small class="text-muted font-weight-bold text-uppercase">Active Dustbins</small>
+            <div class="h3 font-weight-bold mb-0 text-success">{{ bins|length }}</div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-2">
+          <div class="metric-card">
+            <small class="text-muted font-weight-bold text-uppercase">Total Deposits</small>
+            <div class="h3 font-weight-bold mb-0 text-primary">{{ sessions|length }}</div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-2">
+          <div class="metric-card">
+            <small class="text-muted font-weight-bold text-uppercase">Registered Users</small>
+            <div class="h3 font-weight-bold mb-0 text-info">{{ user_stats|length }}</div>
+          </div>
+        </div>
+        <div class="col-md-3 mb-2">
+          <div class="metric-card">
+            <small class="text-muted font-weight-bold text-uppercase">Ledger Records</small>
+            <div class="h3 font-weight-bold mb-0 text-dark">{{ transactions|length }}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 1: SMART DUSTBIN FLEET -->
+      <div class="table-card" id="fleet-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="h5 font-weight-bold mb-0">Smart Dustbin Fleet Telemetry</h4>
+          <span class="badge badge-success px-3 py-1">ESP32 Fleet Online</span>
+        </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th>Bin ID</th>
+                <th>Name & Location</th>
+                <th>Status</th>
+                <th>Fill %</th>
+                <th>Ultrasonic Dist</th>
+                <th>Total Weight</th>
+                <th>Deposits</th>
+                <th>Battery</th>
+                <th>Last Heartbeat</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for b in bins %}
+                <tr>
+                  <td><code>{{ b.id }}</code></td>
+                  <td>
+                    <strong>{{ b.name }}</strong><br />
+                    <small class="text-muted">{{ b.location }}</small>
+                  </td>
+                  <td>
+                    {% if b.status == 'AVAILABLE' %}
+                      <span class="badge badge-success">AVAILABLE</span>
+                    {% elif b.status == 'NEARLY_FULL' %}
+                      <span class="badge badge-warning">NEARLY FULL</span>
+                    {% else %}
+                      <span class="badge badge-danger">FULL</span>
+                    {% endif %}
+                  </td>
+                  <td>
+                    <strong>{{ b.fill_percentage }}%</strong>
+                    <div style="height: 4px; width: 60px; background: #e2e8f0; border-radius: 4px; margin-top: 4px;">
+                      <div style="height: 100%; width: {{ b.fill_percentage }}%; background: {% if b.fill_percentage >= 90 %}#ef4444{% elif b.fill_percentage >= 75 %}#f59e0b{% else %}#10b981{% endif %};"></div>
+                    </div>
+                  </td>
+                  <td>{{ b.last_distance_cm }} cm</td>
+                  <td>{{ b.total_weight_kg }} kg</td>
+                  <td>{{ b.total_deposits }}</td>
+                  <td>{{ b.battery_percentage }}%</td>
+                  <td class="small text-muted">{{ b.last_heartbeat }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 2: DEPOSIT SESSIONS (STATE MACHINE MONITOR) -->
+      <div class="table-card" id="sessions-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <div>
+            <h4 class="h5 font-weight-bold mb-1">Deposit Session Lifecycle Monitor</h4>
+            <p class="text-muted small mb-0">Tracks the ESP32 state machine transitions and ephemeral QR claim status.</p>
+          </div>
+          <span class="badge badge-primary px-3 py-1">State Machine</span>
+        </div>
+
+        {% if not sessions %}
+          <div class="alert alert-light border text-center py-4 text-muted">No deposit sessions recorded yet.</div>
+        {% else %}
+          <div class="table-responsive">
+            <table class="table table-hover">
+              <thead class="thead-light">
+                <tr>
+                  <th>Session ID</th>
+                  <th>Bin</th>
+                  <th>State</th>
+                  <th>Weight</th>
+                  <th>Points</th>
+                  <th>Claimed By</th>
+                  <th>Claim Time</th>
+                  <th>Failure Reason</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for s in sessions %}
                   <tr>
-                    {% for i in d_keys %}
-                    <th scope="col">{{ i }}</th>
-                    {% endfor %}
+                    <td><code>{{ s.id }}</code></td>
+                    <td>{{ s.bin_id }}</td>
+                    <td><span class="state-pill state-{{ s.state }}">{{ s.state }}</span></td>
+                    <td>{{ s.weight_grams }}g</td>
+                    <td><strong>{{ s.points_awarded }}</strong></td>
+                    <td>{{ s.claimed_by_mail or '-' }}</td>
+                    <td class="small text-muted">{{ s.claimed_at or '-' }}</td>
+                    <td class="small text-danger">{{ s.failure_reason or '-' }}</td>
                   </tr>
-                </thead>
-                <tbody>
-                    {% for i in data %}
-                    <tr>
-                        {% for j in i %}
-                        <td>{{ i[j] }}</td>
-                        {% endfor %}
-                    </tr>
-                    {% endfor %}
-                </tbody>
-              </table>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- SECTION 3: POINTS LEDGER AUDIT -->
+      <div class="table-card" id="ledger-section">
+        <div class="d-flex justify-content-between align-items-center mb-3">
+          <h4 class="h5 font-weight-bold mb-0">Points Ledger Audit Stream</h4>
+          <span class="badge badge-secondary px-3 py-1">Immutable Log</span>
         </div>
+
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th>Tx ID</th>
+                <th>User</th>
+                <th>Delta</th>
+                <th>Balance After</th>
+                <th>Source Type</th>
+                <th>Reference</th>
+                <th>Description</th>
+                <th>Timestamp</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for t in transactions %}
+                <tr>
+                  <td><code>#{{ t.id }}</code></td>
+                  <td><strong>{{ t.user_mail }}</strong></td>
+                  <td class="font-weight-bold {% if t.delta > 0 %}text-success{% else %}text-danger{% endif %}">
+                    {% if t.delta > 0 %}+{% endif %}{{ t.delta }}
+                  </td>
+                  <td><strong>{{ t.balance_after }}</strong></td>
+                  <td><span class="badge badge-light border">{{ t.source_type }}</span></td>
+                  <td><small class="text-muted">{{ t.source_ref or '-' }}</small></td>
+                  <td class="small text-muted">{{ t.description }}</td>
+                  <td class="small text-muted">{{ t.created_at }}</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 4: USER STATS -->
+      <div class="table-card" id="users-section">
+        <h4 class="h5 font-weight-bold mb-3">User Directory & Recycling Summary</h4>
+        <div class="table-responsive">
+          <table class="table table-hover">
+            <thead class="thead-light">
+              <tr>
+                <th>Email</th>
+                <th>Full Name</th>
+                <th>Current Points Balance</th>
+                <th>Verified Deposits</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for u in user_stats %}
+                <tr>
+                  <td><strong>{{ u.mail }}</strong></td>
+                  <td>{{ u.name }}</td>
+                  <td><span class="badge badge-success px-2 py-1 font-weight-bold">{{ u.balance }} pts</span></td>
+                  <td>{{ u.total_deposits }} completed</td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- SECTION 5: RAW TELEMETRY MESSAGES -->
+      <div class="table-card" id="telemetry-section">
+        <h4 class="h5 font-weight-bold mb-3">Raw Device Telemetry (<code>messages.json</code>)</h4>
+        {% if not legacy_logs %}
+          <div class="alert alert-light border text-center py-3 text-muted">No raw messages recorded.</div>
+        {% else %}
+          <div class="table-responsive">
+            <table class="table table-sm table-striped">
+              <thead class="thead-light">
+                <tr>
+                  <th>Device / Bin</th>
+                  <th>Payload Data</th>
+                  <th>Timestamp</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for log in legacy_logs|reverse %}
+                  <tr>
+                    <td><code>{{ log.device_id or log.bin_id or 'Unknown' }}</code></td>
+                    <td><small class="text-muted">{{ log }}</small></td>
+                    <td><small class="text-muted">{{ log.timestamp or '-' }}</small></td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% endif %}
+      </div>
     </div>
-
-</div>
-
-<!-- Bootstrap JS and dependencies -->
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.0.7/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
+  </body>
 </html>
